@@ -40,42 +40,46 @@ def search_record(desired):
 
 
 def add_contact(fio, number):
-    with open(file_path, "a" , encoding="utf8") as file:
-        file.write(f"\n{fio.replace(' ', ';')};{number}")
+    with open(file_path, "r", encoding="utf8") as file:
+        sp = list(file.readlines())
+        with open(file_path, "a", encoding="utf8") as file:
+            file.write(f"\n{len(sp)+1};{fio.replace(' ', ';')};{number}")
 
 
 def edit_contact(position):
-    with open(file_path, "r" , encoding="utf8") as file:
+    with open(file_path, "r", encoding="utf8") as file:
         sp = list(file.readlines())
         contact = sp[position - 1].split(";")
         change_selection = int(input("Выберите действие: \n1 - изменить ФИО; "
-          "\n2 - изменить номер; "
-          "\n3 - изменить всю информацию; "
-          "\n4 - отмена.\n "))
+                                     "\n2 - изменить номер; "
+                                     "\n3 - изменить всю информацию; "
+                                     "\n4 - отмена.\n "))
         if change_selection == 1:
-            sp[position - 1] = f"{contact[0]};{input('Введите новое ФИО через пробел: ').replace(' ',';')};{contact[-1]}\n"
+            sp[position -
+                1] = f"{contact[0]};{input('Введите новое ФИО через пробел: ').replace(' ',';')};{contact[-1]}\n"
         elif change_selection == 2:
             contact[-1] = input("Введите новый номер: ")+"\n"
             sp[position - 1] = ";".join(contact)
         elif change_selection == 3:
-            sp[position - 1] = f"{contact[0]};{input('Введите новое ФИО и номер через пробел: ').replace(' ',';')}\n"
+            sp[position -
+                1] = f"{contact[0]};{input('Введите новое ФИО и номер через пробел: ').replace(' ',';')}\n"
         elif change_selection == 4:
             return
-        with open(file_path, "w" , encoding="utf8") as file:
-            for i in sp:
-                file.writelines(i)
-        
-            
-def del_contact(position):
-    with open(file_path, "r" , encoding="utf8") as file:
-        sp = list(file.readlines())
-        del sp[position-1]
-        for i in range(len(sp)):
-            sp[i] = f"{i+1};"+";".join([sp[i].split(";")[j] for j in range(1,len(sp[i].split(";")))])
-        with open(file_path, "w" , encoding="utf8") as file:
+        with open(file_path, "w", encoding="utf8") as file:
             for i in sp:
                 file.writelines(i)
 
+
+def del_contact(position):
+    with open(file_path, "r", encoding="utf8") as file:
+        sp = list(file.readlines())
+        del sp[position-1]
+        for i in range(len(sp)):
+            sp[i] = f"{i+1};"+";".join([sp[i].split(";")[j]
+                                       for j in range(1, len(sp[i].split(";")))])
+        with open(file_path, "w", encoding="utf8") as file:
+            for i in sp:
+                file.writelines(i)
 
 
 def main():
@@ -97,11 +101,13 @@ def main():
         add_contact(new_fio, new_number)
     elif select == 4:
         show_all_records()
-        change_number = int(input("\nВведите id контакта, для редактирования: "))
+        change_number = int(
+            input("\nВведите id контакта, для редактирования: "))
         edit_contact(change_number)
     elif select == 5:
         show_all_records()
         del_number = int(input("\nВведите id контакта, для удаления: "))
         del_contact(del_number)
-    
+
+
 main()
